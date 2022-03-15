@@ -2,16 +2,16 @@ radio.setGroup(69)
 let pocatek = false
 let konec = 0
 let zacatek = 0
+RunComp.SetLightLevel()
 input.onButtonPressed(Button.A, function on_button_pressed_a() {
     
     pocatek = true
 })
-RunComp.SetLightLevel()
 RunComp.OnLightDrop(function on_light_drop() {
     
     if (pocatek == true) {
-        pocatek = false
         radio.sendNumber(1)
+        pocatek = false
     }
     
 })
@@ -23,6 +23,13 @@ radio.onReceivedNumber(function on_received_number(receivedNumber: number) {
         console.logValue("recieved", receivedNumber)
         console.logValue("konec", konec)
         console.logValue("cas", cas)
-        basic.showNumber(cas / 1000)
+        while (pocatek == false) {
+            basic.showNumber(cas / 1000)
+        }
+    })
+})
+control.inBackground(function onIn_background() {
+    basic.forever(function on_forever() {
+        console.logValue("pocatek", pocatek)
     })
 })
